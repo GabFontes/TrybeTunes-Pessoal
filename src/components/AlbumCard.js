@@ -14,7 +14,7 @@ export default class Card extends Component {
       releaseDate,
       trackCount,
     } = this.props;
-    
+
     return (
       <div key={ artistId }>
         <span>{artistId}</span>

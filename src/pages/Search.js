@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import Header from '../components/Header';
 import searchAlbumsAPI from '../services/searchAlbumsAPI';
 import Loading from './Loading';
-import Card from '../components/Card';
+import Card from '../components/AlbumCard';
 
 const INITIAL_STATE = {
   artistInput: '',
