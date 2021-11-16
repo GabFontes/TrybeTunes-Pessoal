@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import Header from '../components/Header';
 import MusicCard from '../components/MusicCard';
 import getMusics from '../services/musicsAPI';
-import Loading from './Loading';
 
 export default class Album extends Component {
   constructor(props) {
@@ -31,18 +30,21 @@ export default class Album extends Component {
     const {
       results,
     } = this.state;
-    console.log(results);
     return (
-      !results.length ? (<Loading />) : (
-        <div data-testid="page-album">
-          <Header />
-          <h2 data-testid="artist-name">{results[0].artistName}</h2>
-          <h2 data-testid="album-name">{results[0].collectionName}</h2>
-          {results.map((currentMusic, index) => (
-            <MusicCard key={ index } music={ currentMusic } />
-          ))}
-        </div>
-      )
+      <div>
+        <Header />
+        {results.length && (
+          <div data-testid="page-album">
+            <h2 data-testid="artist-name">{results[0].artistName}</h2>
+            <h2 data-testid="album-name">{results[0].collectionName}</h2>
+            {results.map((currentMusic, index) => (
+              currentMusic.previewUrl ? ( // Créditos ao Léo.
+                <MusicCard key={ index } music={ currentMusic } />
+              ) : null
+            ))}
+          </div>
+        )}
+      </div>
     );
   }
 }

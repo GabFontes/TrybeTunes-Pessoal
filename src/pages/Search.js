@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import Header from '../components/Header';
 import searchAlbumsAPI from '../services/searchAlbumsAPI';
 import Loading from './Loading';
-import Card from '../components/AlbumCard';
+import AlbumCard from '../components/AlbumCard';
 
 const INITIAL_STATE = {
   artistInput: '',
@@ -96,7 +96,7 @@ export default class Search extends Component {
             </button>
           </form>
           {loaded && this.validatorDisplay()}
-          {result.map((obj) => <Card key={ obj.artistInput } { ...obj } />)}
+          {result.map((obj) => <AlbumCard key={ obj.artistInput } { ...obj } />)}
         </div>
       )
     );
