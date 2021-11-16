@@ -1,10 +1,15 @@
 import React, { Component } from 'react';
-// import PropTypes from 'prop-types';
+import PropTypes from 'prop-types';
+// import { addSong } from '../services/favoriteSongsAPI';
 
 export default class MusicCard extends Component {
+  favorites() {
+
+  }
+
   render() {
-    const { music: { trackName, previewUrl } } = this.props;
-    // Créditos ao Léo, linha 7.
+    const { music: { trackName, previewUrl, trackId } } = this.props;
+    // Créditos ao Léo, linha 9.
     return (previewUrl !== undefined ? (
 
       <div key={ trackName }>
@@ -15,6 +20,14 @@ export default class MusicCard extends Component {
           <code>audio</code>
           .
         </audio>
+        <label htmlFor="favorite">
+          Favorita
+          <input
+            id="favorite"
+            type="checkbox"
+            data-testid={ `checkbox-music-${trackId}` }
+          />
+        </label>
       </div>
     ) : null
     );
@@ -26,8 +39,10 @@ export default class MusicCard extends Component {
 //   trackName: '',
 // }
 
-// MusicCard.propTypes = {
-//   music: PropTypes.arrayOf().isRequired,
-//   trackName: PropTypes.string,
-//   previewUrl: PropTypes.string,
-// };
+MusicCard.propTypes = {
+  music: PropTypes.shape({
+    trackName: PropTypes.string,
+    previewUrl: PropTypes.string,
+    trackId: PropTypes.string,
+  }).isRequired,
+};

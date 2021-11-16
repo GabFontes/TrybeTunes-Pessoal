@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
-// import PropTypes from 'prop-types';
+import PropTypes from 'prop-types';
 import Header from '../components/Header';
 import MusicCard from '../components/MusicCard';
 import getMusics from '../services/musicsAPI';
+import Loading from './Loading';
 
 export default class Album extends Component {
   constructor(props) {
@@ -11,15 +12,12 @@ export default class Album extends Component {
     this.state = {
       id: props.match.params.id,
       results: [],
-      collectionName: '',
-      artistName: '',
     };
   }
 
   async componentDidMount() {
     const { id } = this.state;
     const results = await getMusics(id);
-    this.music(results);
     this.putResultsInState(results);
   }
 
@@ -29,34 +27,30 @@ export default class Album extends Component {
     });
   }
 
-  music(results) {
-    results.map((currentMusic) => (
-      this.setState({
-        artistName: currentMusic.artistName,
-        collectionName: currentMusic.collectionName,
-      })
-    ));
-  }
-
   render() {
     const {
       results,
-      collectionName,
-      artistName,
     } = this.state;
+    console.log(results);
     return (
-      <div data-testid="page-album">
-        <Header />
-        <h2 data-testid="artist-name">{artistName}</h2>
-        <h2 data-testid="album-name">{collectionName}</h2>
-        {results.map((currentMusic, index) => (
-          <MusicCard key={ index } music={ currentMusic } />
-        ))}
-      </div>
+      !results.length ? (<Loading />) : (
+        <div data-testid="page-album">
+          <Header />
+          <h2 data-testid="artist-name">{results[0].artistName}</h2>
+          <h2 data-testid="album-name">{results[0].collectionName}</h2>
+          {results.map((currentMusic, index) => (
+            <MusicCard key={ index } music={ currentMusic } />
+          ))}
+        </div>
+      )
     );
   }
 }
 
-// Album.propTypes = {
-//   match: PropTypes.objectOf(PropTypes.object).isRequired,
-// };
+Album.propTypes = {
+  match: PropTypes.shape({
+    params: {
+      id: PropTypes.string,
+    },
+  }).isRequired,
+};
