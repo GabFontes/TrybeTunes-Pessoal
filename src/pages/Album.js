@@ -10,13 +10,11 @@ export default class Album extends Component {
   constructor(props) {
     super(props);
 
-    // this.displayLoading = this.displayLoading.bind(this);
-
     this.state = {
       id: props.match.params.id,
       results: [],
       loading: false,
-      favorites: []
+      favorites: [],
     };
   }
 
@@ -24,20 +22,7 @@ export default class Album extends Component {
     const { id } = this.state;
     const results = await getMusics(id);
     this.putResultsInState(results);
-    
-    this.setState({
-      loading: true
-    })
-
-    const favorites = await getFavoriteSongs();
-    console.log(favorites);
-
-    this.setState({
-      loading: false,
-      favorites,
-    })
-
-    // this.displayLoading()
+    this.displayLoading();
   }
 
   putResultsInState(albums) {
@@ -46,19 +31,18 @@ export default class Album extends Component {
     });
   }
 
-  // async displayLoading() {
-  //   this.setState({
-  //     loading: true
-  //   })
+  async displayLoading() {
+    this.setState({
+      loading: true,
+    });
 
-  //   const favorites = await getFavoriteSongs();
+    const favorites = await getFavoriteSongs();
 
-  //   this.setState({
-  //     loading: false,
-  //     favorites,
-  //   })
-  // }
-
+    this.setState({
+      loading: false,
+      favorites,
+    });
+  }
 
   render() {
     const {
