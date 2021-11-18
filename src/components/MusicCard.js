@@ -8,18 +8,33 @@ export default class MusicCard extends Component {
     super();
 
     this.favorites = this.favorites.bind(this);
+    this.handleChange = this.handleChange.bind(this);
 
     this.state = {
       loading: false,
-      checked: false,
+      checkedInput: false,
     };
   }
 
-  async favorites({ target: { checked } }) {
+  componentDidMount() {
+    const { props } = this;
+    (() => { // Créditos ao Hugo Daniel.
+      this.setState({ checkedInput: props.checked });
+    })();
+  }
+
+  handleChange({ target }) {
+    const { name } = target;
+    const value = target.type === 'checkbox' ? target.checked : target.value;
+    this.setState({
+      [name]: value,
+    });
+  }
+
+  async favorites() {
     const { music } = this.props;
     this.setState({
       loading: true,
-      checked,
     });
 
     await addSong(music);
@@ -31,7 +46,7 @@ export default class MusicCard extends Component {
 
   render() {
     const { music: { trackName, previewUrl, trackId } } = this.props;
-    const { loading, checked } = this.state;
+    const { loading, checkedInput } = this.state;
     return (
       loading ? (<Loading />) : (
         <div key={ trackName }>
@@ -49,7 +64,9 @@ export default class MusicCard extends Component {
               type="checkbox"
               data-testid={ `checkbox-music-${trackId}` }
               onChange={ this.favorites }
-              checked={ checked }
+              onClick={ this.handleChange }
+              checked={ checkedInput }
+              name="checkedInput"
             />
           </label>
         </div>
@@ -59,6 +76,7 @@ export default class MusicCard extends Component {
 }
 
 MusicCard.propTypes = {
+  checked: PropTypes.bool.isRequired,
   music: PropTypes.shape({
     trackName: PropTypes.string,
     previewUrl: PropTypes.string,

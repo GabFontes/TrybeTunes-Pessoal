@@ -7,11 +7,10 @@ import { getFavoriteSongs } from '../services/favoriteSongsAPI';
 import Loading from './Loading';
 
 export default class Album extends Component {
-  constructor(props) {
-    super(props);
+  constructor() {
+    super();
 
     this.state = {
-      id: props.match.params.id,
       results: [],
       loading: false,
       favorites: [],
@@ -19,7 +18,7 @@ export default class Album extends Component {
   }
 
   async componentDidMount() {
-    const { id } = this.state;
+    const { match: { params: { id } } } = this.props;
     const results = await getMusics(id);
     this.putResultsInState(results);
     this.displayLoading();
@@ -29,6 +28,12 @@ export default class Album extends Component {
     this.setState({
       results: albums,
     });
+  }
+
+  favoriteChecker(trackId) {
+    const { favorites } = this.state;
+
+    return favorites.some((music) => music.trackId === trackId);
   }
 
   async displayLoading() {
@@ -52,7 +57,7 @@ export default class Album extends Component {
     } = this.state;
     console.log(favorites);
     return (
-      loading ? (<Loading />) : (
+      loading ? <Loading /> : (
         <div>
           <Header />
           {results.length && (
@@ -61,7 +66,11 @@ export default class Album extends Component {
               <h2 data-testid="album-name">{results[0].collectionName}</h2>
               {results.map((currentMusic, index) => (
                 currentMusic.previewUrl ? ( // Créditos ao Léo.
-                  <MusicCard key={ index } music={ currentMusic } />
+                  <MusicCard
+                    key={ index }
+                    checked={ this.favoriteChecker(currentMusic.trackId) }
+                    music={ currentMusic }
+                  />
                 ) : null
               ))}
             </div>
