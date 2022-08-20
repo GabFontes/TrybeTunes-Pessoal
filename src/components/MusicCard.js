@@ -17,17 +17,16 @@ export default class MusicCard extends Component {
   }
 
   componentDidMount() {
-    const { props } = this;
+    const { checked } = this.props;
     (() => { // Créditos ao Hugo Daniel.
-      this.setState({ checkedInput: props.checked });
+      this.setState({ checkedInput: checked });
     })();
   }
 
   handleChange({ target }) {
-    const { name } = target;
-    const value = target.type === 'checkbox' ? target.checked : target.value;
+    const { checked } = target.checked;
     this.setState({
-      [name]: value,
+      checkedInput: checked,
     });
   }
 
